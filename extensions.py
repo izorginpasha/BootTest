@@ -1,5 +1,5 @@
 import json
-
+import telebot
 import requests
 from  config import keys
 
@@ -24,7 +24,12 @@ class CryptoConverter:
         except ValueError:
             raise ConvertionException(f'Не уалось обработать количество {amount} проверте правильность ввода')
 
-        r = requests.get(f'https://currate.ru/api/?get=rates&pairs={quote_ticker}{base_ticker}&key=e8df781119d3ee4fc2c29a050c24b3a7')
-        total_base = float(json.loads(r.content)['data'][quote_ticker+base_ticker])*amount
+        r = requests.get(
+            f'https://min-api.cryptocompare.com/data/price?fsym={quote_ticker}&tsyms={base_ticker}')
+        total_base = json.loads(r.content)[base_ticker]
+
+
 
         return total_base
+
+
